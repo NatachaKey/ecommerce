@@ -14,6 +14,7 @@ const SingleOrderItemSchema = mongoose.Schema({
 
 const OrderSchema = mongoose.Schema(
   {
+    // validations on min for the number fields?
     tax: {
       type: Number,
       required: true,

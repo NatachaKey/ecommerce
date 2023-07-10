@@ -16,6 +16,7 @@ const getSingleUser = async (req, res) => {
     if (!user) {
       throw new CustomError.NotFoundError(`No user with id : ${req.params.id}`);
     }
+    // could checkpermissions be a middleware insetead?
     checkPermissions(req.user, user._id) //we pass user object that is in the request and id property  in a database of the user we are requesting - see line 15
     res.status(StatusCodes.OK).json({ user });
   };
@@ -38,6 +39,7 @@ const updateUser = async (req, res) => {
   }
 
   const user = await User.findOne({ _id: req.user.userId }); //get user
+  // Will this set email/name to undefined if tehy weren't given?
   user.email = email; //update properties manually 
   user.name = name;
 

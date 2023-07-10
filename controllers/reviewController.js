@@ -79,21 +79,28 @@ const updateReview = async (req, res) => {
 //   res.status(StatusCodes.OK).json({ review });
 
 //OPTION 2
-const { id: reviewId } = req.params; //TAKE ID FROM REQ.PARAMS AND ASSIGN IT TO REVIEWiD  
-const { rating, title, comment } = req.body;
-const review = await Review.findOne({ _id: reviewId });
+  const { id: reviewId } = req.params; //TAKE ID FROM REQ.PARAMS AND ASSIGN IT TO REVIEWiD
+  const { rating, title, comment } = req.body; // don't need this
+  const review = await Review.findOne({ _id: reviewId });
 
-if (!review) {
-  throw new CustomError.NotFoundError(`No review with id ${reviewId}`);
-}
+  if (!review) {
+    throw new CustomError.NotFoundError(`No review with id ${reviewId}`);
+  }
 
-checkPermissions(req.user, review.user);
-review.rating = req.body.hasOwnProperty('rating') ? req.body.rating : review.rating
-review.title = req.body.hasOwnProperty('title') ? req.body.title : review.title
-review.comment = req.body.hasOwnProperty('comment') ? req.body.comment : review.comment
+  checkPermissions(req.user, review.user);
+// can simplify with: review.rating = req.body?.rating || review.rating (but hasOwnProperty is better because then that allows us to send/unset values like this: {rating: null})
+  review.rating = req.body.hasOwnProperty('rating')
+    ? req.body.rating
+    : review.rating;
+  review.title = req.body.hasOwnProperty('title')
+    ? req.body.title
+    : review.title;
+  review.comment = req.body.hasOwnProperty('comment')
+    ? req.body.comment
+    : review.comment;
 
-await review.save();
-res.status(StatusCodes.OK).json({ review });
+  await review.save();
+  res.status(StatusCodes.OK).json({ review });
 
 //option 3
 //When we do the object destructuring (const { rating, title, comment } = req.body;), then any fields that didn't exist in req.body will just be saved to the variables on the left-hand-side as undefined.

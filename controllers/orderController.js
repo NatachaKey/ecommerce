@@ -23,17 +23,18 @@ const createOrder = async (req, res) => {
 //initial state
   const initialValue = { subtotal: 0, orderItems: [] };
 
+  // this reduce function is probably worth refactoring/extracting into its own function since its somewhat long.
   // Loop through each item in `cartItems` array (if the array is empty, this will just be skipped)
-  const { subtotal: subtotal, orderItems: orderItems } = await cartItems.reduce(
+  const { subtotal, orderItems } = await cartItems.reduce(
     async (resultsMap, item) => {
-      // Each iteration, item will be the next item in the array. 
+      // Each iteration, item will be the next item in the array.
       //resultsMap will be whatever we return at the end of the reduce function, and the first time it will be equal to `initialValue` (because we pass that to reduce as the second argument on line 63)
 
       const dbProduct = await Product.findOne({ _id: item.product });
       console.log(
         `looping through: resultsMap=${JSON.stringify(
-          await resultsMap
-        )} | item=${JSON.stringify(item)} | dbProduct=${dbProduct}`
+          await resultsMap,
+        )} | item=${JSON.stringify(item)} | dbProduct=${dbProduct}`,
       );
 
       if (!dbProduct) {
@@ -42,6 +43,7 @@ const createOrder = async (req, res) => {
         );
       }
 
+      // this could potentially also be extracted to a helper function
       const { name, price, image, _id } = dbProduct;
       const singleOrderItem = {
         amount: item.amount,
@@ -96,7 +98,7 @@ const createOrder = async (req, res) => {
 
 
 
-  
+
   //calculate total
   const total = tax + shippingFee + subtotal;
   //get client Secret
@@ -116,7 +118,7 @@ const createOrder = async (req, res) => {
   });
   res
     .status(StatusCodes.CREATED)
-    .json({ order, clientSecret: order.clientSecret });
+    .json({ order, clientSecret: order.clientSecret }); // any particular reason to return clientSecret at top-level when it's already part of the order object?
 };
 
 const getAllOrders = async (req, res) => {
@@ -139,6 +141,7 @@ const getCurrentUserOrders = async (req, res) => {
   res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };
 
+// it's a bit misleading to name this route updateOrder, since it seems like the only thing you can do is set an order to "paid" (by passing in an intent id)
 const updateOrder = async (req, res) => {
   const { id: orderId } = req.params;
   const { paymentIntentId } = req.body;
