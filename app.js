@@ -37,7 +37,7 @@ app.use(
 );
 
 app.use(helmet());
-app.use(cors({ origin: ["http://localhost:3000", "https://react-nodejs-ecommerce.netlify.app/"], credentials: true })); //CHAGE TO REAL URL ON NETLIFY
+app.use(cors({ origin: ["http://localhost:3000", "https://react-nodejs-ecommerce.netlify.app"], credentials: true })); //CHAGE TO REAL URL ON NETLIFY
 app.use(xss());
 app.use(mongoSanitize());
 
