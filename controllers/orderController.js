@@ -20,12 +20,15 @@ const createOrder = async (req, res) => {
       'Please provide tax and shipping fee'
     );
   }
-  //initial state
-  const initialValue = { subtotal: 0, orderItems: [] };
+  
   //option 1 - REFACTORED option 2
   
   // extract the values of subtotal and orderItems from the result of the reduce() function applied to the cartItems array. The reduce() function is being invoked with the processOrder function as the reducer and initialValue as the initial accumulator value.
   const processOrder = async (resultsMap, item) => {
+    
+    //initial state
+  const initialValue = { subtotal: 0, orderItems: [] };
+    
     // Each iteration, item will be the next item in the array. !!!!! resultsMap represents the accumulator, which will hold the intermediate results during the reduction process. item represents the current item being processed from the cartItems array.
     //resultsMap will be whatever we return at the end of the reduce function, and the first time it will be equal to `initialValue` (because we pass that to reduce as the second argument on line 26)
     const dbProduct = await Product.findOne({ _id: item.product });
