@@ -2,7 +2,7 @@ const Product = require('../models/Product');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const path = require('path');
-const fs = require('fs');
+
 
 const createProduct = async (req, res) => {
   req.body.user = req.user.userId; // req.body.user - user is required to be provided (see Product.js line 58) and is set to req.user.userId
@@ -67,12 +67,13 @@ const uploadImage = async (req, res) => {
     );
   }
   //make sure that directory exists:
-const uploadsFolder = path.join(__dirname, '../public/uploads');
- if (!fs.existsSync(uploadsFolder)) {
-  fs.mkdirSync(uploadsFolder);
-}
+  const uploadsFolder = path.join(__dirname, '../public/uploads');
+  if (!existsSync(uploadsFolder)) {
+    mkdirSync(uploadsFolder);
+  }
 
   const imagePath = path.join(uploadsFolder, productImage.name);
+
 //or:  
 //  const imagePath = path.join(
   //  __dirname,
