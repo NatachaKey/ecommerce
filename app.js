@@ -48,11 +48,6 @@ app.use(cookieParser(process.env.JWT_SECRET)); //access cookies coming back from
 app.use(express.static('./public', { extensions: ['html'] })); // a way for /docs to work being served from public folder instead of needing its own dedicated route definition (also fix issue with js not working)
 app.use(fileUpload());
 
-
-app.get('/browser-app.js', (req, res) => {
-  res.sendFile(path.join(__dirname, 'browser-app.js'));
-});
-
 // //testing in postman if the token is stored in a cookie
 // app.get('/api/v1', (req, res) => {
 //   //console.log(req.cookies);
