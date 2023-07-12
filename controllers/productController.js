@@ -65,11 +65,18 @@ const uploadImage = async (req, res) => {
       'Please upload image smaller than 1MB'
     );
   }
+  //make sure that directory exists:
+const uploadsFolder = path.join(__dirname, '../public/uploads');
+  if (!existsSync(uploadsFolder)) {
+    mkdirSync(uploadsFolder);
+  }
 
-  const imagePath = path.join(
-    __dirname,
-    '../public/uploads/' + `${productImage.name}`
-  );
+  const imagePath = path.join(uploadsFolder, productImage.name);
+//or:  
+//  const imagePath = path.join(
+  //  __dirname,
+  //  '../public/uploads/' + `${productImage.name}`
+  //);
   await productImage.mv(imagePath);
   res.status(StatusCodes.OK).json({ image: `https://ecommerce-6kwa.onrender.com/uploads/${productImage.name}` });
   //res.status(StatusCodes.OK).json({ image: `/uploads/${productImage.name}` });
