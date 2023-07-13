@@ -2,6 +2,7 @@ const Product = require('../models/Product');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const path = require('path');
+const fs = require('fs');
 
 
 const createProduct = async (req, res) => {
@@ -68,8 +69,8 @@ const uploadImage = async (req, res) => {
   }
   //make sure that directory exists:
   const uploadsFolder = path.join(__dirname, '../public/uploads');
-  if (!existsSync(uploadsFolder)) {
-    mkdirSync(uploadsFolder);
+  if (!fs.existsSync(uploadsFolder)) {
+    fs.mkdirSync(uploadsFolder);
   }
 
   const imagePath = path.join(uploadsFolder, productImage.name);
