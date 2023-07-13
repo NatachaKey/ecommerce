@@ -194,6 +194,28 @@ const getCurrentUserOrders = async (req, res) => {
   res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };
 
+const payOrder=  async (req, res) => {
+  const { amount, currency, description, token } = req.body;
+   checkPermissions(req.user, order.user); 
+
+   try {
+    const charge = await stripe.charges.create({
+      amount,
+      currency,
+      description,
+      source: token,
+    });
+
+    // Handle successful payment
+    res.json({ success: true, charge });
+  } catch (error) {
+    // Handle payment failure
+    res.json({ success: false, error: error.message });
+  }
+ 
+};
+
+
 const updatePaymentStatus = async (req, res) => {
   const { id: orderId } = req.params;
   const { paymentIntentId } = req.body;
@@ -215,4 +237,5 @@ module.exports = {
   getCurrentUserOrders,
   createOrder,
   updatePaymentStatus ,
+  payOrder,
 };

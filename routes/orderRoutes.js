@@ -10,7 +10,8 @@ const {
   getSingleOrder,
   getCurrentUserOrders,
   createOrder,
-  updatePaymentStatus ,
+  updatePaymentStatus, 
+  payOrder,
 } = require('../controllers/orderController');
 
 router
@@ -27,5 +28,5 @@ router
 
   router
   .route('/:id/pay')
-  .patch(authenticateUser,  updatePaymentStatus );
+  .patch(authenticateUser, payOrder, updatePaymentStatus );
 module.exports = router;

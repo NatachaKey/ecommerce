@@ -3,7 +3,7 @@ require('express-async-errors');
 const path = require('path');
 const express = require('express');
 const app = express();
-
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser'); //to get access to the cookie received from the browser
 const fileUpload = require('express-fileupload');
