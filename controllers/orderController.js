@@ -41,10 +41,7 @@ const createOrder = async (req, res) => {
     if (!dbProduct) {
       throw new CustomError.NotFoundError(`No product with id ${item.product}`);
     }
-const { subtotal, orderItems } = await cartItems.reduce(
-    processOrder,
-    initialValue
-  ); //see lines 57, 58
+
     
     // const generateSingleOrderItem = (dbProduct, item) => {
     //   const { name, price, image, _id } = dbProduct;
@@ -79,6 +76,11 @@ const { subtotal, orderItems } = await cartItems.reduce(
     return resultsMap; //The updated resultsMap is returned so that it can be used as the accumulator for the next iteration of the reduce() function.
   };
 
+  const { subtotal, orderItems } = await cartItems.reduce(
+    processOrder,
+    initialValue
+  ); //see lines 57, 58
+  
   //option 2
   // //initial state
   //   const initialValue = { subtotal: 0, orderItems: [] };
