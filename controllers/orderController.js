@@ -10,7 +10,21 @@ const fakeStripeAPI = async ({ amount, currency }) => {
   return { client_secret, amount };
 };
 
-// first, we define how we want the reducer to work. This function could be put at the top of the `createOrder` function 
+
+
+const createOrder = async (req, res) => {
+  const { orderItems: cartItems, tax, shippingFee, subtotal } = req.body;
+  if (!cartItems || cartItems.length < 1) {
+    throw new CustomError.BadRequestError('No cart items provided');
+  }
+  if (!tax || !shippingFee) {
+    throw new CustomError.BadRequestError(
+      'Please provide tax and shipping fee'
+    );
+  }
+  
+  // [OPTION] processOrder could be defined here, inside createOrder, but **before** the reducer needs to use the function
+  // first, we define how we want the reducer to work. This function could be put at the top of the `createOrder` function 
 // OUR OPTION  or could even be outside of the `createOrder`, at the top of the `orderController.js` file. 
 // It could even be in a separate folder and get imported in. 
 // The main important part is that it should be fully defined, _before_ we try to use it in the reducer
@@ -48,19 +62,6 @@ const processOrder = async (resultsMap, item) => {
   return resultsMap; //The updated resultsMap is returned so that it can be used as the accumulator for the next iteration of the reduce() function.
 };
 
-
-const createOrder = async (req, res) => {
-  const { orderItems: cartItems, tax, shippingFee, subtotal } = req.body;
-  if (!cartItems || cartItems.length < 1) {
-    throw new CustomError.BadRequestError('No cart items provided');
-  }
-  if (!tax || !shippingFee) {
-    throw new CustomError.BadRequestError(
-      'Please provide tax and shipping fee'
-    );
-  }
-  
-  // [OPTION] processOrder could be defined here, inside createOrder, but **before** the reducer needs to use the function
 
   // initial accumulator value. For each iteration through cartItems, we will do some processing in `processOrder` function to update this object
   const initialValue = { subtotal: 0, orderItems: [] };
