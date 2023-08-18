@@ -1,3 +1,6 @@
+
+docs for this API https://ecommerce-6kwa.onrender.com/docs
+
 Steps taken to develop this project- backend (node.js)
 
 #### Setup Basic Express Server
